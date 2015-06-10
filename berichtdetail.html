@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>InstructeursApp</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="jquery/jquery.mobile-1.4.5.min.css" />
+    <script src="jquery/jquery-1.11.1.min.js"></script>
+    <script src="jquery/jquery.mobile-1.4.5.min.js"></script>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="config.js"></script>
+    <script id="panel-init">
+            $(function() {
+                $( "body>[data-role='panel']" ).panel();
+            });
+    </script>
+</head>
+<body>
+<script type="text/javascript">
+ function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+        vars[key] = value;
+    });
+    return vars;
+}
+    var id = getUrlVars()["id"];
+    
+function logOff(){
+	//logg off the user by deleting from localStorage
+	// delete localStorage.ehboiauser;
+	document.location.href="index.html"; 
+}  
+function ajax_post(){
+		// Create our XMLHttpRequest object
+		var hr = new XMLHttpRequest();
+		// Create some variables we need to send to our PHP file
+		var url2 = $path + "setBericht.php";
+		var berichtid = id;
+		var fn =1;
+		var vars = "id="+berichtid;
+		if (fn != ""){
+			hr.open("POST", url2, true);
+			// Set content type header information for sending url encoded variables in the request
+			hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			// Access the onreadystatechange event for the XMLHttpRequest object
+			hr.onreadystatechange = function() {
+				if(hr.readyState == 4 && hr.status == 200) {
+					var return_data = hr.responseText;
+					//document.getElementById("status2").innerHTML = return_data;
+                    console.log(return_data);
+				}
+			}
+			// Send the data to PHP now... and wait for response to update the status div
+			hr.send(vars); // Actually execute the request
+			document.getElementById("status").innerHTML = "Wachten...";
+           
+			var location = "berichten.html";
+			setTimeout(function(){document.location.href=location},3000);
+			
+		}else{
+			//voer else uit
+			document.getElementById("status").innerHTML = "Fout bij verwerking.";
+            
+		}
+	}	    
+</script>
+    
+<div data-role="page" class="jqm-demos" data-quicklinks="true">
+	<div role="main" class="ui-content jqm-content jqm-fullwidth">
+        <div data-role="header"> 
+        <div data-role="navbar">
+            <ul>
+                <li><a href="javascript: window.history.back();" data-icon="arrow-l" data-ajax="false"></a></li>
+                <li><a href="#leftpanel3" data-icon="grid"></a></li>
+            </ul>
+	   </div><!-- /navbar -->
+    </div>      
+ 
+      
+        
+    
+        <div id="logo"><img src="images/IEHBOlogo.png"></div>
+     
+		<div id="label01">Uw Berichten</div>
+
+        <div id="berichtenstroom" style="clear: both"></div>
+        
+        <script type="text/javascript">
+            $(document).ready(function(){
+                var url = $path+"getBerichtenDetail.php?id="+id;
+            //    console.log("url = "+url);
+                $.getJSON(url,function(json){
+
+                    // loop through the news here
+                    $.each(json.berichten,function(i,dat){
+                       dag = dat.created.substr(8,2); 
+                        maand = dat.created.substr(5,2);
+                        jaar = dat.created.substr(0,4);
+                        datum = dag+"-"+maand+"-"+jaar;
+                        $("#berichtenstroom").append(											
+                            '<div class="whiteborder" style="text-align: left"><div id="datum">'+datum+'</div>'+
+                              '<div><strong>'+dat.titel+'</strong></div>'+
+                              '<div><p>'+dat.bericht+'</p></div>'+
+                            '<div onClick="javascript:ajax_post();"><a href="#" class="normal" ><div class="bu-actie" style="width: 190px">Markeer als gelezen</div></a></div>'
+
+
+
+                        );
+                    });
+                });
+            });
+         </script>
+
+	<div id="status"></div>
+		
+
+	<!-- /content -->
+
+</div><!-- /page -->
+
+	
+
+	
+
+	<!-- leftpanel3  -->
+	<div data-role="panel" id="leftpanel3" data-position="left" data-display="overlay" style="background-color:#f6a341">
+<div   data-enhance="false">
+        <h3 class="panellabel">Menu</h3>
+        <hr>
+        <h3><a href="trainingen.html" class="panel" data-ajax="false">Bijeenkomsten</a></h3> 
+        <h3><a href="berichten.html" class="panel" data-ajax="false">Berichten  <div id="berichten" style="position: relative; float: right; margin-right:75px"></div></a></h3> 
+        <h3><a href="nieuws.html" data-ajax="false" class="panel">Nieuws</a></h3>
+        <h3><a href="#" onClick="logOff();" class="panel" data-ajax="false">Uitloggen</a></h3>
+       
+        
+        <a href="#demo-links"><div data-rel="close" class="ui-btn ui-input-btn ui-corner-all ui-shadow ui-icon-delete ui-btn-icon-notext">Icon only<input type="button" data-icon="delete" data-iconpos="notext" value="Icon only"></a></div>
+				
+        </div>
+	</div><!-- /leftpanel3 -->
+    </div>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        var url = $path+"getBerichten.php?trainer_id="+localStorage.trainer_id;
+        $.getJSON(url,function(json){
+            $.each(json.berichten,function(i,dat){
+
+                $("#berichten").append(		dat.aantal									
+                   
+
+
+                );
+            });
+        });
+    });
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61955900-1', 'auto');
+  ga('send', 'pageview');
+
+</script>    
+</body>
+</html>

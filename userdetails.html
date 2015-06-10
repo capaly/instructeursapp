@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>InstructeursApp</title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    
+
+<link rel="stylesheet" href="jquery/jquery.mobile-1.4.5.min.css" />
+<script src="jquery/jquery-1.11.1.min.js"></script>
+<script src="jquery/jquery.mobile-1.4.5.min.js"></script>
+<script src="config.js"></script>    
+<script id="panel-init">
+		$(function() {
+			$( "body>[data-role='panel']" ).panel();
+		});
+	</script>
+<script>
+//make sure there is a logged in user 
+//if not send an alert
+if (localStorage.getItem("user") === null) {
+	alert("U moet inloggen om deze app te gebruiken.");
+  	document.location.href="index.html"; 
+}
+function logOff(){
+	//logg off the user by deleting from localStorage
+	// delete localStorage.ehboiauser;
+	document.location.href="index.html"; 
+}    
+function ajax_post(){
+		// Create our XMLHttpRequest object
+		var hr = new XMLHttpRequest();
+		// Create some variables we need to send to our PHP file
+		var url = $path+"editProfile.php";
+		var fn = document.getElementById("firstname").value;
+		var ct = document.getElementById("lastname").value;
+		var email= document.getElementById("email").value;
+		var password = document.getElementById("password").value;
+		var vars = "firstname="+fn+"&lastname="+ct+"&email="+email+"&password="+password+"&id="+localStorage.ehboiauser;
+		if (fn != ""){
+			hr.open("POST", url, true);
+			// Set content type header information for sending url encoded variables in the request
+			hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			// Access the onreadystatechange event for the XMLHttpRequest object
+			hr.onreadystatechange = function() {
+				if(hr.readyState == 4 && hr.status == 200) {
+					var return_data = hr.responseText;
+					document.getElementById("status").innerHTML = return_data;
+				}
+			}
+			// Send the data to PHP now... and wait for response to update the status div
+			hr.send(vars); // Actually execute the request
+			document.getElementById("status").innerHTML = "Processing...";
+			//setTimeout(function(){document.location.href="trainingen.html"},3000);		
+		}else{
+			//voer else uit
+			document.getElementById("status").innerHTML = "Your email details are missing. Email is empty.";
+		}
+	}
+    
+$(document).ready(function(){
+   // alert("kom ik hier?");
+	var url=$path+"getUserDetails.php?id="+localStorage.ehboiauser;
+	$.getJSON(url,function(json){
+		// loop through the categories here
+		$.each(json.user,function(i,dat){
+			var id = dat.id;
+			var fname = dat.voornaam;
+			var lname = dat.naam;
+			var email = dat.email;
+			var password = dat.wachtwoord;
+			document.getElementById("firstname").value=fname;
+			document.getElementById("lastname").value=lname;
+			document.getElementById("email").value=email;
+			document.getElementById("password").value=password;			
+		});
+	});
+});  
+</script> 
+    
+    </head>
+<body>
+<div data-role="page" class="jqm-demos" data-quicklinks="true">
+ 
+
+
+	<div role="main" class="ui-content jqm-content jqm-fullwidth">
+<a href="#leftpanel3" class="ui-btn ui-shadow ui-corner-all ui-btn-inline ui-mini">Menu</a>
+		<h1>Uw Details</h1>
+
+		
+
+		<label for="textinput">First Name:</label>
+            	  <input type="text" name="firstname" value="" id="firstname" />
+                  <label for="textinput">Last Name:</label>
+            	  <input type="text" name="lastname" value="" id="lastname" />
+                  <label for="textinput">Email:</label>
+            	  <input type="text" name="email" value="" id="email" />
+                  <label for="textinput">Password:</label>
+            	  <input type="text" name="password" value="" id="password" />
+	
+		 <input type="button" value="Opslaan" onClick="javascript:ajax_post();"> 
+
+	</div><!-- /content -->
+<div id="status"></div>
+</div><!-- /page -->
+
+	
+
+	
+
+	<!-- leftpanel3  -->
+	<div data-role="panel" id="leftpanel3" data-position="left" data-display="overlay" data-theme="b">
+
+        <h3>Menu</h3>
+       <hr>
+         <h3><a href="trainingen.html" data-ajax="false">Trainingen</a></h3> 
+      <h3><a href="berichten.html">Berichten</a></h3> 
+        <h3><a href="userdetails.html" data-ajax="false">Mijn gegevens</a></h3> <h3><a href="nieuws.html" data-ajax="false">Nieuws</a></h3>
+        <h3><a href="#" onClick="logOff();">Uitloggen</a></h3>
+       
+        
+        <a href="#demo-links"><div data-rel="close" class="ui-btn ui-input-btn ui-corner-all ui-shadow ui-icon-delete ui-btn-icon-notext">Icon only<input type="button" data-icon="delete" data-iconpos="notext" value="Icon only"></a></div>
+				
+
+	</div><!-- /leftpanel3 -->
+
+
+	
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>InstructeursApp</title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    
+
+<link rel="stylesheet" href="jquery/jquery.mobile-1.4.5.min.css" />
+<script src="jquery/jquery-1.11.1.min.js"></script>
+<script src="jquery/jquery.mobile-1.4.5.min.js"></script>
+<script src="config.js"></script>    
+<script id="panel-init">
+		$(function() {
+			$( "body>[data-role='panel']" ).panel();
+		});
+	</script>
+<script>
+//make sure there is a logged in user 
+//if not send an alert
+if (localStorage.getItem("user") === null) {
+	alert("U moet inloggen om deze app te gebruiken.");
+  	document.location.href="index.html"; 
+}
+function logOff(){
+	//logg off the user by deleting from localStorage
+	// delete localStorage.ehboiauser;
+	document.location.href="index.html"; 
+}    
+    
+</script>    
+    </head>
+<body>
+<div data-role="page" class="jqm-demos" data-quicklinks="true">
+
+    <div data-role="header"> 
+	  
+        
+        
+        <div data-role="navbar">
+            <ul>
+                <li><a href="#leftpanel3" data-icon="grid"></a></li>
+                <li><a href="index.html" data-icon="arrow-l" data-ajax="false"></a></li>
+                
+            </ul>
+	   </div><!-- /navbar -->
+    </div>
+
+    
+
+	<div role="main" class="ui-content jqm-content jqm-fullwidth">
+<a href="#leftpanel3" class="ui-btn ui-shadow ui-corner-all ui-btn-inline ui-mini">Menu</a>
+		<h1>Nieuws</h1>
+
+		
+
+		<div id="nieuws"></div>
+        
+        <script type="text/javascript">
+							$(document).ready(function(){
+								
+                                var url = $path+"getNieuws.php";
+                            //    console.log("url = "+url);
+								$.getJSON(url,function(json){
+									// loop through the news here
+									$.each(json.nieuws,function(i,dat){
+										$("#nieuws").append(											
+											'<div style="height:35px">'+
+                                              '<a href="'+$path+'nieuwsdetail.html?news_id='+dat.id+'" data-ajax="false">'+dat.titel+'</a>'+
+                                            '</div>'
+											
+											
+										);
+									});
+								});
+							});
+                </script>
+
+	
+		
+
+	</div><!-- /content -->
+
+</div><!-- /page -->
+
+	
+
+	
+
+	<!-- leftpanel3  -->
+	<div data-role="panel" id="leftpanel3" data-position="left" data-display="overlay" data-theme="b">
+
+        <h3>Menu</h3>
+       <hr>
+        <h3><a href="trainingen.html" data-ajax="false">Trainingen</a></h3> 
+      <h3><a href="berichten.html">Berichten</a></h3> 
+        <h3><a href="userdetails.html" data-ajax="false">Mijn gegevens</a></h3> <h3><a href="nieuws.html" data-ajax="false">Nieuws</a></h3>
+        <h3><a href="#" onClick="logOff();">Uitloggen</a></h3>
+       
+        
+        <a href="#demo-links"><div data-rel="close" class="ui-btn ui-input-btn ui-corner-all ui-shadow ui-icon-delete ui-btn-icon-notext">Icon only<input type="button" data-icon="delete" data-iconpos="notext" value="Icon only"></a></div>
+				
+
+	</div><!-- /leftpanel3 -->
+
+
+	
+</body>
+</html>

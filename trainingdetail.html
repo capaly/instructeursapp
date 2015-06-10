@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>InstructeursApp</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="jquery/jquery.mobile-1.4.5.min.css" />
+    <script src="jquery/jquery-1.11.1.min.js"></script>
+    <script src="jquery/jquery.mobile-1.4.5.min.js"></script>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="config.js"></script>    
+    <script id="panel-init">
+		$(function() {
+			$( "body>[data-role='panel']" ).panel();
+		});
+        function logOff(){
+            //logg off the user by deleting from localStorage
+            // delete localStorage.ehboiauser;
+            document.location.href="index.html"; 
+        }    
+    </script>    
+</head>
+<body>
+<div data-role="page" class="jqm-demos" data-quicklinks="true">
+<script type="text/javascript">
+ function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+        vars[key] = value;
+    });
+    return vars;
+ }
+var id = getUrlVars()["id"];
+var deelnemers = getUrlVars()["deelnemers"];
+var categorie = getUrlVars()["categorie"];
+</script>   
+<div role="main" class="ui-content jqm-content jqm-fullwidth">
+        <div data-role="header"> 
+        <div data-role="navbar">
+            <ul>
+                <li><a href="trainingen.html" data-icon="arrow-l" data-ajax="false"></a></li>
+                <li><a href="#leftpanel3" data-icon="grid"></a></li>
+            </ul>
+	   </div><!-- /navbar -->
+    </div>
+
+    
+    <div id="logo"><img src="images/IEHBOlogo.png"></div>
+        <div id="label01">Praktijkbijeenkomst</div>
+		
+		<div id="trainingen"></div>	
+            <script type="text/javascript">
+                $(document).ready(function(){
+                    var adres;
+                    var plaats;
+                    var url = $path+"getTrainingDetail.php?id="+id;
+                    var training_id;
+                    $.getJSON(url,function(json){
+                        // loop through the categories here
+                        var teller = 1;
+                        $.each(json.trainingen,function(i,dat){
+                            //go get the address
+                            var url = $path+"getAdres.php?id="+id;
+                                $.getJSON(url,function(json){
+                                    // loop inside loop
+                                    $.each(json.adres,function(j,dat2){
+                                        adres = dat2.address;
+                                        plaats = dat2.city;
+                                        //vervang spatie in adres met + om te kunnen gebruiken in geo
+                                       var geoadres = adres.replace(" ", "+"); 
+                                        $("#trainingen").append(
+                                            
+                                            '<div class="map">'+
+                                            '<div class="blackbehindtext">Locatie</div>'+
+                                            '<div class="blackbehindtext">'+adres+'</div>'+
+                                            '<div class="blackbehindtext">'+dat2.zip+' '+plaats+'</div>'+
+                                            '<div class="blackbehindtext">'+dat2.name+'</div>'+
+                                            '</div>'+
+                                            '<a href="geo:0,0?q='+geoadres+'+'+plaats+'?z=11" class="normal">'+
+                                            '<div class="bu-actie2">Toon route</div></a>'+
+                                            
+                                            
+                                            '<div class="whiteborder">T: '+dat2.phone+
+                                            
+                                             '<a href="tel:'+dat2.phone+'"><div class="bu-actie">Bel</div></a>'+
+                                            
+                                            '</div>'
+                                            
+                                            
+
+
+                                        );
+
+                                    });
+                                });
+
+
+
+
+
+                            var myUnixDate = new Date(dat.dtstart *1000);
+                            //voor de kalender
+                            var month = myUnixDate.getMonth()+1;
+                            var day = myUnixDate.getDate();
+                            var year = myUnixDate.getFullYear();
+                            console.log("dag: "+day+" maand: "+month+" jaar: "+year);
+                            
+                            
+                            
+                            //////////////////////////////////////////////////////
+                             myDate = myUnixDate.toLocaleDateString();
+                             myTime = myUnixDate.toLocaleTimeString();
+                             myTime = myTime.substr(0,5);
+                            var myUnixEndTime = new Date(dat.dtend *1000);
+                            myEntTime = myUnixEndTime.toLocaleTimeString();
+                            myEntTime = myEntTime.substr(0,5);
+                            var cursus = dat.summary;
+                            $("#trainingen").append(
+                                
+                                '<div class="whiteborder">'+dat.summary+'</div>'+
+                                '<div style="text-align: center; margin-top:10px; margin-bottom:10px">Datum: '+myDate+'<br>Tijd: '+myTime+'<br>Tot: '+myEntTime+'</div>'+
+                                
+                                
+                               
+                                '<div class="whiteborder">Aantal deelnemers: '+deelnemers+
+                                
+                                
+                                '<a href="deelnemerslijst.html?id='+id+'&cursus='+cursus+'&startdatum='+dat.dtstart+'&categorie='+categorie+'" class="normal" data-ajax="false">'+
+                                '<div class="bu-actie">Toon</div></a>'+
+                                
+                                
+                                '</div>'+
+                                
+                                
+                                
+                                
+                              '</div>'  
+                            );
+                        });
+                    });
+                });
+                </script>
+ 	</div><!-- /content -->
+        
+   <!-- /page --></div>
+
+	<!-- leftpanel3  -->
+	<div data-role="panel" id="leftpanel3" data-position="left" data-display="overlay" style="background-color:#f6a341">
+<div   data-enhance="false">
+        <h3 class="panellabel">Menu</h3>
+        <hr>
+        <h3><a href="trainingen.html" class="panel" data-ajax="false">Bijeenkomsten</a></h3> 
+        <h3><a href="berichten.html" class="panel" data-ajax="false">Berichten  <div id="berichten" style="position: relative; float: right; margin-right:75px"></div></a></h3> 
+        <h3><a href="nieuws.html" data-ajax="false" class="panel">Nieuws</a></h3>
+        <h3><a href="#" onClick="logOff();" class="panel" data-ajax="false">Uitloggen</a></h3>
+       
+        
+        <a href="#demo-links"><div data-rel="close" class="ui-btn ui-input-btn ui-corner-all ui-shadow ui-icon-delete ui-btn-icon-notext">Icon only<input type="button" data-icon="delete" data-iconpos="notext" value="Icon only"></a></div>
+				
+        </div>
+	</div><!-- /leftpanel3 -->
+    </div>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        var url = $path+"getBerichten.php?trainer_id="+localStorage.trainer_id;
+        $.getJSON(url,function(json){
+            $.each(json.berichten,function(i,dat){
+
+                $("#berichten").append(		dat.aantal									
+                   
+
+
+                );
+            });
+        });
+    });
+</script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61955900-1', 'auto');
+  ga('send', 'pageview');
+
+</script>    
+</body>
+</html>

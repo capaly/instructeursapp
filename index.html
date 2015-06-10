@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>InstructeursApp</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="jquery/jquery.mobile-1.4.5.min.css" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="jquery/jquery-1.11.1.min.js"></script>
+    <script src="jquery/jquery.mobile-1.4.5.min.js"></script>
+    <script src="config.js"></script>
+    <script id="panel-init">
+            $(function() {
+                $( "body>[data-role='panel']" ).panel();
+            });
+    </script>
+</head>
+<body>
+<div data-role="page" class="jqm-demos" data-quicklinks="true">
+<script type="text/javascript">
+function ajax_post(){
+    // Create our XMLHttpRequest object
+    var hr = new XMLHttpRequest();
+    // Create some variables we need to send to our PHP file
+	// the email is the user in this app
+    var url = $path+ "getUser.php";
+    var fn = document.getElementById("email").value;
+    var ln = document.getElementById("wachtwoord").value;
+    var vars = "email="+fn+"&wachtwoord="+ln;
+	
+    hr.open("POST", url, true);
+    // Set content type header information for sending url encoded variables in the request
+    hr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    // Access the onreadystatechange event for the XMLHttpRequest object
+    hr.onreadystatechange = function() {
+	    if(hr.readyState == 4 && hr.status == 200) {
+		    var return_data = hr.responseText;
+           if ($debug === 1){
+			console.log("readyState = "+hr.readyState);
+			console.log("status = "+hr.status);
+			console.log("return_data is founduser = "+return_data);
+           }
+			document.getElementById("status").innerHTML = return_data;
+            if ($debug === 1){
+                console.log("trainer id = "+ return_data);
+            }
+            var lengte = return_data.length;     
+            if (lengte < 15){
+                localStorage.ehboiauser = fn;
+                localStorage.ehboiawachtwoord = ln;
+                localStorage.trainer_id = return_data;
+                window.location.href = "trainingen.html";
+            }           
+	    }
+    }
+    // Send the data to PHP now... and wait for response to update the status div
+    hr.send(vars); // Actually execute the request
+    document.getElementById("status").innerHTML = "processing...";
+}
+</script>
+
+<div role="main" class="ui-content jqm-content jqm-fullwidth">
+    <div id="logo"><img src="images/IEHBOlogo.png"></div>
+    <div id="label01">Inloggen</div>
+<div class="padding">	
+<form>
+    <script type="text/javascript">
+        document.write("Gebruikersnaam");
+        var valuser;
+        var valwachtwoord;
+        if (localStorage.getItem("ehboiauser") === null) {
+                valuser = "";
+                valwachtwoord = "";
+        }else{
+                valuser = localStorage.ehboiauser;
+                valwachtwoord = localStorage.ehboiawachtwoord;
+        }
+        document.write("<div style='width: 65%; max-width: 300px'><input type='text' name='email' id='email' value='"+valuser+"'></div>");
+        document.write("Wachtwoord");
+        document.write("<div style='width: 65%; max-width: 300px'><input type='password' name='wachtwoord' id='wachtwoord' value='"+valwachtwoord+"'></div>");
+    </script>
+    <div style="width: 65%; max-width: 300px"><input type="button" value="Inloggen" onClick="javascript:ajax_post();"></div>
+</form>		
+    <div id="status" style="margin-top:10px; margin-left:20px"><p><strong></strong></p></div>
+   </div>  
+    
+  <div class="whiteborder2">
+    <div id="newsp1">iedereenEHBO.nl</div><div id="newsp2">Nieuws</div>
+        <div id="nieuws"></div>
+        <script type="text/javascript">
+	       $(document).ready(function(){
+           var url = $path+"getNieuws.php";
+           $.getJSON(url,function(json){
+           // loop through the news here
+        	$.each(json.nieuws,function(i,dat){
+                dag = dat.created.substr(8,2); 
+                maand = dat.created.substr(5,2);
+                jaar = dat.created.substr(0,4);
+                datum = dag+"-"+maand+"-"+jaar;
+				$("#nieuws").append(											
+					'<div><div id="datum">'+datum+'</div>'+
+                    '<a href="'+$path+'nieuwsdetail.html?news_id='+dat.id+'" data-ajax="false" class="nieuws">'+dat.titel+'</a>'+
+                    '</div>'
+						);
+									});
+								});
+							});
+        </script>
+    
+    </div>
+   
+	</div><!-- /content -->
+   
+</div><!-- /page -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61955900-1', 'auto');
+  ga('send', 'pageview');
+
+</script>    
+</body>
+</html>
