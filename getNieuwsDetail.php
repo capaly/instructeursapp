@@ -8,7 +8,7 @@ require_once("database.php");
 $arr = array();
 //get the news
 
-$rs = mysqli_query($link,"SELECT id,titel,tekst, created FROM *** where id = $news_id");
+$rs = mysqli_query($link,"SELECT id,titel,tekst, created FROM iapp_nieuws where id = $news_id");
 
 //loop door de records 
 while($obj = mysqli_fetch_object($rs)) {

@@ -6,7 +6,7 @@ $arr = array();
 //make the unix timestamp to calculate in the futures
 $datum = mktime();
 
-$rs = mysqli_query($link,"SELECT evdet_id, dtstart, summary FROM *** where evdet_id =  '$event_id' and dtstart >= '$datum'");
+$rs = mysqli_query($link,"SELECT evdet_id, dtstart, summary FROM jos_jevents_vevdetail where evdet_id =  '$event_id' and dtstart >= '$datum'");
 
 //loop door de records 
 while($obj = mysqli_fetch_object($rs)) {

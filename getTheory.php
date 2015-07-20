@@ -16,7 +16,7 @@ $telcursisten = count($cursisten)-1;
 for ($x = 0; $x <= $telcursisten-1; $x++) {
     
      $rs = mysqli_query($link,"SELECT user_id, event_type, type, expire_date 
-                                FROM *** 
+                                FROM ehih_certificates 
                                 WHERE user_id =  '$cursisten[$x]' 
                                 AND event_type = 'T' 
                                 AND type = '$categorie'

@@ -8,7 +8,7 @@ require_once("database.php");
 $arr = array();
 
 $rs = mysqli_query($link,"SELECT * 
-                            FROM `***` 
+                            FROM `ehih_certificates` 
                             WHERE `user_id` = $id LIMIT 1");
 
 //loop door de records 

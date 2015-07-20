@@ -21,7 +21,7 @@ $wachtwoord=md5($wachtwoord);
 
 $arr = array();
 //get the user
-$rs = mysqli_query($link,"SELECT id, username, password FROM *** where username =  '$email' ");
+$rs = mysqli_query($link,"SELECT id, username, password FROM jos_users where username =  '$email' ");
 
 //loop door de records 
 while($obj = mysqli_fetch_object($rs)) {

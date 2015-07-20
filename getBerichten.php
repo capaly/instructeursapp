@@ -5,7 +5,7 @@ require_once("database.php");
 
 //get the number of messages for the trainer
 
-$rs = mysqli_query($link,"SELECT * FROM *** where trainer_id = $trainer_id and gelezen = 0");
+$rs = mysqli_query($link,"SELECT * FROM iapp_berichten where trainer_id = $trainer_id and gelezen = 0");
 
 $row_cnt = mysqli_num_rows($rs);
 

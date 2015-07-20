@@ -8,7 +8,7 @@ require_once("database.php");
 
 
 
-$rs = mysqli_query($link,"UPDATE berichten SET gelezen = 1 WHERE id = $id");
+$rs = mysqli_query($link,"UPDATE iapp_berichten SET gelezen = 1 WHERE id = $id");
 
 
 

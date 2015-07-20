@@ -5,7 +5,7 @@ $event_id = $_GET['id'];
 
 $arr = array();
 //get the location_id
-$rs = mysqli_query($link,"SELECT eventId, location_id FROM *** where eventId =  '$event_id'");
+$rs = mysqli_query($link,"SELECT eventId, location_id FROM jos_dtregister_group_event where eventId =  '$event_id'");
 
 //loop door de records 
 while($obj = mysqli_fetch_object($rs)) {
@@ -15,7 +15,7 @@ $arr[] = $obj;
 
 //now go get the address with the location_id
 $arr2 = array();
-$rs2 = mysqli_query($link,"SELECT id, name, address, city, zip, phone, xgeo, ygeo FROM *** where id =  '$location_id'");
+$rs2 = mysqli_query($link,"SELECT id, name, address, city, zip, phone, xgeo, ygeo FROM jos_dtregister_locations where id =  '$location_id'");
 
 //loop door de records 
 while($obj = mysqli_fetch_object($rs2)) {

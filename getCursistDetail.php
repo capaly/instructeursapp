@@ -9,7 +9,7 @@ $id = escape($id);
 $arr = array();
 
 $rs = mysqli_query($link,"SELECT user_id, userFirstName, userLastName, userCity  
-                            FROM `***` 
+                            FROM `jos_dtregister_user` 
                             WHERE `user_id` = $id LIMIT 1 ");
 
 //loop door de records 

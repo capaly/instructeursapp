@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>InstructeursApp</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="jquery/jquery.mobile-1.4.5.min.css" />
+    <link rel="stylesheet" href="styles.css" />
+
+    <script src="jquery/jquery-1.11.1.min.js"></script>
+    <script src="jquery/jquery.mobile-1.4.5.min.js"></script>
+    <script src="config.js"></script> 
+    <script id="panel-init">
+		$(function() {
+			$( "body>[data-role='panel']" ).panel();
+		});
+
+    
+
+    function logOff(){
+        //logg off the user by deleting from localStorage
+        // delete localStorage.ehboiauser;
+        document.location.href="index.html"; 
+    } 
+       
+       
+        
+        
+    </script>    
+</head>
+<body>
+<div data-role="page" class="jqm-demos" data-quicklinks="true">
+	<div role="main" class="ui-content jqm-content jqm-fullwidth">
+            <div data-role="header"> 
+        <div data-role="navbar">
+            <ul>
+                <li><a href="javascript: window.history.back();" data-icon="arrow-l" data-ajax="false"></a></li>
+                <li><a href="#leftpanel3" data-icon="grid"></a></li>
+            </ul>
+	   </div><!-- /navbar -->
+    </div>
+
+        
+    <div id="logo"><img src="images/IEHBOlogo.png"></div>
+        <div id="label01">Praktijkbijeenkomsten</div>
+   
+		<div id="trainingen"></div>	
+            <script type="text/javascript">
+               // $(document).ready(function(){
+                    var url = $path+"getTrainingen.php?user=70393";
+                    $.getJSON(url,function(json){
+                        // loop through the trainingen here
+                        //loop inside loop met event_id
+                            $.each(json.trainingen,function(i,dat){
+                             var url = $path+"getTrainingen2.php?event_id="+dat.event_id;
+                             $.getJSON(url,function(json){
+                               $.each(json.trainingen,function(j,dat2){
+                                 var myUnixDate = new Date(dat2.dtstart *1000);
+                                 myDate = myUnixDate.toLocaleDateString();
+                                 myTime = myUnixDate.toLocaleTimeString();
+                                 myTime = myTime.substr(0,5);   
+                                   rdDate = dat2.dtstart;
+                                   console.log("rdDate in midden = "+rdDate);
+                                $("#trainingen").append(	
+                                    
+                                    '<div class="whiteborder">'+
+                                      '<a href="'+$path+'trainingdetail.html?id='+dat2.evdet_id+'&deelnemers='+dat.registration_count+'&categorie='+dat.category+'" data-ajax="false" class="events">'+dat2.summary+''+
+                                  
+                                    '<br><strong>Datum: '+myDate+'</strong>'+
+                                    '<div>Tijd: '+myTime+'</div>'+
+                                    '</div></a>'
+                                    
+                                    
+                                );
+                               });
+                              });
+                        });
+                    });
+               
+               // });
+            </script>
+        <!-- /content -->
+</div><!-- /page -->
+	<!-- leftpanel3  -->
+	<div data-role="panel" id="leftpanel3" data-position="left" data-display="overlay" style="background-color:#f6a341">
+<div   data-enhance="false">
+        <h3 class="panellabel">Menu</h3>
+        <hr>
+        <h3><a href="trainingen.html" class="panel" data-ajax="false">Bijeenkomsten</a></h3> 
+        <h3><a href="berichten.html" class="panel" data-ajax="false">Berichten  <div id="berichten" style="position: relative; float: right; margin-right:75px"></div></a></h3> 
+        <h3><a href="nieuws.html" data-ajax="false" class="panel">Nieuws</a></h3>
+        <h3><a href="#" onClick="logOff();" class="panel" data-ajax="false">Uitloggen</a></h3>
+       
+        
+        <a href="#demo-links"><div data-rel="close" class="ui-btn ui-input-btn ui-corner-all ui-shadow ui-icon-delete ui-btn-icon-notext">Icon only<input type="button" data-icon="delete" data-iconpos="notext" value="Icon only"></a></div>
+				
+        </div>
+	</div><!-- /leftpanel3 -->
+    
+    
+    </div>
+
+    <script type="text/javascript">
+$(document).ready(function(){        
+    console.log("rdDate onderin = "+rdDate); // werkt niet.. rdDate is altijd leeg
+    }); 
+    </script>
+</body>
+</html>

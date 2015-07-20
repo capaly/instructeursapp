@@ -8,11 +8,11 @@ $arr = array();
 $datum = date('Ymd');
 //$datum="11112015";
 
+//$rs = mysqli_query($link,"SELECT event_id, teacher_user_id, registration_count FROM ehih_extra_dtregister_vars where teacher_user_id =  ".$user);
 
-
-$rs = mysqli_query($link,"SELECT event_id, teacher_user_id, registration_count, category FROM *** a 
-                            JOIN *** b ON a.event_id = b.eventId
-                            WHERE *** = ".$user);
+$rs = mysqli_query($link,"SELECT event_id, teacher_user_id, registration_count, category FROM ehih_extra_dtregister_vars a 
+                            JOIN jos_dtregister_group_event b ON a.event_id = b.eventId
+                            WHERE teacher_user_id = ".$user);
 
 
    

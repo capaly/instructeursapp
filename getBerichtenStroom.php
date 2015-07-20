@@ -4,7 +4,7 @@ require_once("database.php");
  
 $arr = array();
 
-$rs = mysqli_query($link,"SELECT * FROM *** where trainer_id = $trainer_id and gelezen = 0 order by id DESC");
+$rs = mysqli_query($link,"SELECT * FROM iapp_berichten where trainer_id = $trainer_id and gelezen = 0 order by id DESC");
 
 //loop door de records 
 while($obj = mysqli_fetch_object($rs)) {

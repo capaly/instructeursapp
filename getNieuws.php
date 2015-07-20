@@ -5,7 +5,7 @@ $datumnu =  date("Y-m-d");
 
 $arr = array();
 
-$rs = mysqli_query($link,"SELECT id, titel, created, showtill, active FROM *** WHERE
+$rs = mysqli_query($link,"SELECT id, titel, created, showtill, active FROM iapp_nieuws WHERE
                                         active = '1' AND
                                         showtill >= '$datumnu' 
                                         order by id DESC limit 5", MYSQLI_USE_RESULT);

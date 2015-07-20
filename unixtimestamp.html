@@ -1,0 +1,34 @@
+<html>
+<head>
+
+</head>
+<body>
+<script>
+// create a new javascript Date object based on the timestamp
+// multiplied by 1000 so that the argument is in milliseconds, not seconds
+var date = new Date(1335371400*1000);
+// hours part from the timestamp
+var hours = date.getHours();
+// minutes part from the timestamp
+var minutes = "0" + date.getMinutes();
+// seconds part from the timestamp
+// day part from the timestamp
+var day = date.getDay();
+// month part from the timestamp
+var month = date.getMonth();
+// year part from the timestamp
+var year = date.getFullYear();
+//format full readable date
+var fulldate = day+"-"+month+"-"+year; 
+    document.write("<br>datum: "+fulldate);
+// will display time in 10:30format
+var formattedTime = hours + ':' + minutes.substr(minutes.length-2);    
+    document.write("<br>tijd: "+formattedTime);
+    
+    
+var myDate = new Date(1337945400 *1000);
+document.write("<br>"+myDate.toLocaleString());    
+    
+</script>
+</body>
+</html>
